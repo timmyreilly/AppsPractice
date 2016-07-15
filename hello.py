@@ -6,6 +6,7 @@ from flask.ext.bootstrap import Bootstrap
 from wtforms.validators import Required
 
 from wiki_sentiment import * 
+from photo_logic import * 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess'
@@ -25,7 +26,8 @@ def photo():
     form = PhotoForm()
     if form.validate_on_submit():
         session['photo_url'] = form.photo_url.data
-        photo_to_new_url(form.photo_url.data) 
+        find_photo(session['photo_url'])
+        return redirect(url_for('photo'))
     return render_template('photo.html', form=form, photo_url=session.get('photo_url'))
 
 @app.route("/resume")
