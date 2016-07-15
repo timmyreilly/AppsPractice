@@ -21,6 +21,15 @@ class PhotoForm(Form):
     photo_url = StringField('What would you like your new photo to be', validators=[Required()])
     submit = SubmitField('Submit') 
 
+@app.route("/image_analysis", methods=["GET", "POST"])
+def image_analysis():
+    form = PhotoForm()
+    if form.validate_on_submit():
+        session['photo_url'] = form.photo_url.data 
+        session['image_data'] = get_photo_info(session['photo_url'])
+        return redirect(url_for('image_analysis'))
+    return render_template('image_analysis.html', form=form, image_data=session.get('image_data'))
+
 @app.route("/photo", methods=["GET", "POST"])
 def photo():
     form = PhotoForm()
@@ -28,7 +37,7 @@ def photo():
         session['photo_url'] = form.photo_url.data
         find_photo(session['photo_url'])
         return redirect(url_for('photo'))
-    return render_template('photo.html', form=form, photo_url=session.get('photo_url'))
+    return render_template('photo.html', form=form, photo_url=session.get('photo_url')
 
 @app.route("/resume")
 def hello():
