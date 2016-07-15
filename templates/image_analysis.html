@@ -7,6 +7,8 @@
 <div class="page-header">
     <h1>{% if photo_url %}You searched {{ photo_url }}{% else %}{% endif %}!</h1>
     <img src="{{ url_for('static', filename='photo.jpg') }}">
+    <h1>{% if photo_description %}Photo Description: {{ photo_description }}{% else %}NOPE{% endif %}</h1>
+    <h2>{% if background_color %}Background Color: {{ background_color }}{% else %}NOPE{% endif %}</h2>
 </div>
 {{ wtf.quick_form(form) }}
 {% endblock %}

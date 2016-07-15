@@ -26,9 +26,16 @@ def image_analysis():
     form = PhotoForm()
     if form.validate_on_submit():
         session['photo_url'] = form.photo_url.data 
-        session['image_data'] = get_photo_info(session['photo_url'])
+        find_photo(session['photo_url'])
+        raw = get_photo_info(session['photo_url'])
+        session['background_color'] = str(raw['color'])
+        session['photo_description'] = str(raw['categories'])
         return redirect(url_for('image_analysis'))
-    return render_template('image_analysis.html', form=form, image_data=session.get('image_data'))
+    return render_template('image_analysis.html', 
+                            form=form, 
+                            photo_url=session.get('photo_url'),
+                            background_color=session.get('background_color'),
+                            photo_description=session.get('photo_description'))
 
 @app.route("/photo", methods=["GET", "POST"])
 def photo():
@@ -37,7 +44,7 @@ def photo():
         session['photo_url'] = form.photo_url.data
         find_photo(session['photo_url'])
         return redirect(url_for('photo'))
-    return render_template('photo.html', form=form, photo_url=session.get('photo_url')
+    return render_template('photo.html', form=form, photo_url=session.get('photo_url'))
 
 @app.route("/resume")
 def hello():
